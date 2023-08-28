@@ -1,0 +1,12 @@
+[
+  {
+      "Filename": "file_%07d.jpg",
+      "FirstFrameNumber": 1,
+      "LastFrameNumber": 10
+  },
+  {
+      "Filename": "image_%07d.png",
+      "FirstFrameNumber": 2,
+      "LastFrameNumber": 20
+  }
+]
