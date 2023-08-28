@@ -1,2 +1,5 @@
 ReactCDKPackage
 templates
+.idea
+.DS_Store
+__py_cache__

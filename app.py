@@ -4,6 +4,19 @@ from flask import Flask, request, jsonify, send_file
 
 app = Flask(__name__)
 
+def parse_fields(filename, item):
+    first_frame_number = int(item['FirstFrameNumber']) if isinstance(item['FirstFrameNumber'], str) else item[
+        'FirstFrameNumber']
+    last_frame_number = int(item['LastFrameNumber']) if isinstance(item['LastFrameNumber'], str) else item[
+        'LastFrameNumber']
+
+    first_frame = filename.replace('%07d', f"{first_frame_number:07d}")
+    last_frame = filename.replace('%07d', f"{last_frame_number:07d}")
+    return {
+        "FirstFrame": first_frame,
+        "LastFrame": last_frame
+    }
+
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -23,28 +36,10 @@ def process():
             output = []
             for item in input_data:
                 filename = item['Filename']
-                first_frame_number = item['FirstFrameNumber']
-                last_frame_number = item['LastFrameNumber']
-
-                first_frame = filename.replace('%07d', f"{first_frame_number:07d}")
-                last_frame = filename.replace('%07d', f"{last_frame_number:07d}")
-
-                output.append({
-                    "FirstFrame": first_frame,
-                    "LastFrame": last_frame
-                })
+                output.append(parse_fields(filename, item))
         elif isinstance(input_data, dict):
-            output = {}
             filename = input_data['Filename']
-
-            first_frame_number = input_data['FirstFrameNumber']
-            last_frame_number = input_data['LastFrameNumber']
-
-            first_frame = filename.replace('%07d', f"{first_frame_number:07d}")
-            last_frame = filename.replace('%07d', f"{last_frame_number:07d}")
-
-            output["FirstFrame"] = first_frame
-            output["LastFrame"] = last_frame
+            output = parse_fields(filename, input_data)
         else:
             output = {}
 
